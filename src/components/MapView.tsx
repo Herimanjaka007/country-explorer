@@ -1,7 +1,17 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import type { Country } from '../types/country';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
+
+const DefaultIcon = L.icon({
+    iconRetinaUrl,
+    iconUrl,
+    shadowUrl,
+});
 interface MapViewProps {
     countries: Country[];
     onCountryClick: (country: Country) => void;
@@ -28,7 +38,11 @@ const MapView = ({ countries, onCountryClick }: MapViewProps) => {
                     if (country.latlng && country.latlng.length === 2) {
                         const [lat, lng] = country.latlng;
                         return (
-                            <Marker key={country.cca3} position={[lat, lng]} eventHandlers={{ click: () => onCountryClick(country) }}>
+                            <Marker key={country.cca3}
+                                icon={DefaultIcon}
+                                position={[lat, lng]}
+                                eventHandlers={{ click: () => onCountryClick(country) }}>
+
                                 <Popup>
                                     <div className="font-bold text-lg">{country.name.common}</div>
                                     <img src={country.flags.png} alt={`${country.name.common} flag`} className="w-16 h-auto mt-1 border border-gray-200" />
