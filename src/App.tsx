@@ -6,9 +6,20 @@ import CountryGrid from './components/CountryGrid';
 import MapView from './components/MapView';
 import CountryDetails from './components/CountryDetails';
 import type { Country } from './types/country';
+import PaginationControls from './components/common/PaginationControls';
 
 function App() {
-    const { filteredCountries, loading, error, searchTerm, setSearchTerm } = useCountries();
+    const {
+        filteredCountries,
+        loading,
+        error,
+        searchTerm,
+        setSearchTerm,
+        totalPages,
+        currentPage,
+        goToPage,
+        paginatedCountries,
+    } = useCountries();
     const [isMapView, setIsMapView] = useState<boolean>(false);
     const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
 
@@ -56,7 +67,7 @@ function App() {
                                 <SearchBar
                                     searchTerm={searchTerm}
                                     onSearchChange={setSearchTerm}
-                                    placeholder="Search by country name or capital..."
+                                    placeholder="Search by country name or capital"
                                 />
                             </div>
                             <div className="w-full md:w-auto flex justify-center md:justify-end">
@@ -71,14 +82,26 @@ function App() {
 
                         <p className="text-center text-xl mb-6 text-gray-700 dark:text-gray-300">
                             Showing {filteredCountries.length} countries.
+                            {totalPages > 0 && (
+                                <span className="ml-2"> (Page {currentPage} of {totalPages})</span>
+                            )}
                         </p>
 
                         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl min-h-[500px]">
                             {filteredCountries.length > 0 ? (
                                 isMapView ? (
-                                    <MapView countries={filteredCountries} onCountryClick={handleCountryClick} />
+                                    <MapView countries={paginatedCountries} onCountryClick={handleCountryClick} />
                                 ) : (
-                                    <CountryGrid countries={filteredCountries} onCountryClick={handleCountryClick} />
+                                    <>
+                                        <CountryGrid countries={paginatedCountries} onCountryClick={handleCountryClick} />
+                                        {totalPages > 1 && (
+                                            <PaginationControls
+                                                currentPage={currentPage}
+                                                totalPages={totalPages}
+                                                onPageChange={goToPage}
+                                            />
+                                        )}
+                                    </>
                                 )
                             ) : (
                                 <p className="text-center text-gray-600 dark:text-gray-400 text-2xl">No countries found matching your search criteria.</p>
