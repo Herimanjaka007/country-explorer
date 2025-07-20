@@ -8,7 +8,7 @@ const LIMITED_FIELDS: string = 'name,capital,region,population,area,flags,latlng
  * 
  * @returns Promise<Country[]>
  * @description Fetches all countries from the REST Countries API.
- * @throws Will throw an error if the fetch operation fails or if the response is not ok
+ * @throws Will throw an error if the fetch operation fails
  */
 export const getAllCountries = async (): Promise<Country[]> => {
     try {
