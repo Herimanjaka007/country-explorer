@@ -42,6 +42,7 @@ const MapView = ({ countries, onCountryClick }: MapViewProps) => {
                                 icon={DefaultIcon}
                                 position={[lat, lng]}
                                 eventHandlers={{ click: () => onCountryClick(country) }}>
+
                                 <Popup>
                                     <div className="font-bold text-lg">{country.name.common}</div>
                                     <img src={country.flags.png} alt={`${country.name.common} flag`} className="w-16 h-auto mt-1 border border-gray-200" />
